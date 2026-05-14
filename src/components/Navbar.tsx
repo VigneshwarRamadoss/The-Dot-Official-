@@ -16,6 +16,7 @@ const navItems = [
   { id: 'team', label: 'TEAM' },
   { id: 'why', label: 'WHY' },
   { id: 'contact', label: 'CONTACT' },
+  { id: 'snake-game', label: 'GAME' },
 ];
 
 export default function Navbar() {

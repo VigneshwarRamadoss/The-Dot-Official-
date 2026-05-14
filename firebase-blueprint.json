@@ -1,0 +1,27 @@
+{
+  "entities": {
+    "HighScore": {
+      "title": "HighScore",
+      "description": "Global high score for the snake game",
+      "type": "object",
+      "properties": {
+        "score": {
+          "type": "integer",
+          "description": "The highest score achieved"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the high score was last updated"
+        }
+      },
+      "required": ["score", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "stats/snake": {
+      "schema": "HighScore",
+      "description": "Stores current global high score"
+    }
+  }
+}

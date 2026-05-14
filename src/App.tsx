@@ -15,6 +15,7 @@ import Portfolio from './components/sections/Portfolio';
 import Team from './components/sections/Team';
 import WhyUs from './components/sections/WhyUs';
 import Contact from './components/sections/Contact';
+import SnakeGame from './components/sections/SnakeGame';
 import Cursor from './components/Cursor';
 import Loader from './components/Loader';
 
@@ -48,6 +49,7 @@ export default function App() {
           <Team />
           <WhyUs />
           <Contact />
+          <SnakeGame />
         </HorizontalScroll>
       </main>
     </>

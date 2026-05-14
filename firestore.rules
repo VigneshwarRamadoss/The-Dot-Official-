@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidHighScore(data) {
+      return data.score is int 
+        && data.score >= 0
+        // Size enforcement for number isn't direct, but int check is there
+        && data.updatedAt == request.time
+        && data.keys().hasAll(['score', 'updatedAt'])
+        && data.keys().size() == 2;
+    }
+
+    match /stats/{statId} {
+      allow read: if isValidId(statId);
+      
+      allow create: if isValidId(statId) && isVerified() && isValidHighScore(request.resource.data);
+      
+      allow update: if isValidId(statId) && isVerified() && isValidHighScore(request.resource.data) && (
+        // Action: New High Score
+        request.resource.data.score > resource.data.score &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['score', 'updatedAt'])
+      );
+    }
+  }
+}
