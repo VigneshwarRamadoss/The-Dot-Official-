@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -11,18 +11,24 @@ interface HorizontalScrollProps {
 export const HorizontalScroll: React.FC<HorizontalScrollProps> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      if (!scrollRef.current || !containerRef.current) return;
+    if (!scrollRef.current || !containerRef.current) return;
 
-      const animation = gsap.to(scrollRef.current, {
+    // FIX 2: Use matchMedia so the horizontal pin only applies on md+ screens
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
+      setIsMobile(false);
+      // Desktop / Tablet landscape: horizontal scroll as-is
+      const animation = gsap.to(scrollRef.current!, {
         x: () => -(scrollRef.current!.scrollWidth - window.innerWidth),
         ease: 'none',
         scrollTrigger: {
-          trigger: containerRef.current,
+          trigger: containerRef.current!,
           pin: true,
-          scrub: 1,
+          scrub: 0.1,
           invalidateOnRefresh: true,
           start: 'top top',
           end: () => `+=${scrollRef.current!.scrollWidth - window.innerWidth}`,
@@ -35,22 +41,35 @@ export const HorizontalScroll: React.FC<HorizontalScrollProps> = ({ children }) 
         });
       });
 
-      resizeObserver.observe(scrollRef.current);
+      resizeObserver.observe(scrollRef.current!);
 
       return () => {
         resizeObserver.disconnect();
         animation.kill();
       };
-    }, containerRef);
+    });
 
-    return () => ctx.revert();
+    mm.add("(max-width: 767px)", () => {
+      // Mobile: stack sections vertically, no GSAP pin
+      setIsMobile(true);
+      return () => {
+        // Cleanup: restore defaults when leaving this breakpoint
+        setIsMobile(false);
+      };
+    });
+
+    return () => mm.revert();
   }, []);
 
   return (
     <div ref={containerRef} className="relative overflow-hidden">
       <div 
         ref={scrollRef} 
-        className="flex flex-nowrap h-screen w-max items-center"
+        className={isMobile 
+          ? "flex flex-col w-full h-auto items-stretch" 
+          : "flex flex-nowrap h-screen w-max items-center"
+        }
+        style={{ willChange: isMobile ? 'auto' : 'transform' }}
       >
         {children}
       </div>

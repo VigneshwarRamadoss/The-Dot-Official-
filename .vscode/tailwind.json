@@ -1,0 +1,35 @@
+{
+  "version": 1.1,
+  "atDirectives": [
+    {
+      "name": "@theme",
+      "description": "Tailwind CSS v4: defines design tokens in the CSS theme namespace.",
+      "references": [{ "name": "Tailwind CSS Docs", "url": "https://tailwindcss.com/docs/theme" }]
+    },
+    {
+      "name": "@apply",
+      "description": "Tailwind CSS: applies utility classes inline in CSS.",
+      "references": [{ "name": "Tailwind CSS Docs", "url": "https://tailwindcss.com/docs/functions-and-directives#apply" }]
+    },
+    {
+      "name": "@layer",
+      "description": "Tailwind CSS: adds styles to a specific layer (base, components, utilities).",
+      "references": [{ "name": "Tailwind CSS Docs", "url": "https://tailwindcss.com/docs/functions-and-directives#layer" }]
+    },
+    {
+      "name": "@utility",
+      "description": "Tailwind CSS v4: defines a custom utility class.",
+      "references": [{ "name": "Tailwind CSS Docs", "url": "https://tailwindcss.com/docs" }]
+    },
+    {
+      "name": "@variant",
+      "description": "Tailwind CSS v4: defines a custom variant.",
+      "references": [{ "name": "Tailwind CSS Docs", "url": "https://tailwindcss.com/docs" }]
+    },
+    {
+      "name": "@source",
+      "description": "Tailwind CSS v4: declares a content source for scanning utility class usage.",
+      "references": [{ "name": "Tailwind CSS Docs", "url": "https://tailwindcss.com/docs" }]
+    }
+  ]
+}

@@ -4,51 +4,30 @@ import { cn } from '../lib/utils';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-import ScrambleText from './ScrambleText';
+import { Menu, X } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const navItems = [
-  { id: 'hero', label: 'HOME' },
-  { id: 'about', label: 'ABOUT' },
-  { id: 'services', label: 'SERVICES' },
-  { id: 'work', label: 'WORK' },
-  { id: 'team', label: 'TEAM' },
-  { id: 'why', label: 'WHY' },
-  { id: 'contact', label: 'CONTACT' },
-  { id: 'snake-game', label: 'GAME' },
+  { id: 'hero', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'services', label: 'Services' },
+  { id: 'work', label: 'Work' },
+  { id: 'team', label: 'Team' },
+  { id: 'contact', label: 'Contact' },
 ];
 
 export default function Navbar() {
   const [activeTab, setActiveTab] = useState('hero');
   const activeTabRef = useRef('hero');
   const isScrollingRef = useRef(false);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     activeTabRef.current = activeTab;
   }, [activeTab]);
 
-  const logoRef = useRef<HTMLDivElement>(null);
-  const navContainerRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<(HTMLButtonElement | null)[]>([]);
-
   useEffect(() => {
-    // Staggered entrance for nav items
-    gsap.fromTo(itemsRef.current, 
-      { opacity: 0, x: -30, scale: 0.5 },
-      { 
-        opacity: 1, 
-        x: 0, 
-        scale: 1, 
-        duration: 1, 
-        stagger: 0.1, 
-        ease: "back.out(1.7)",
-        delay: 3.5 
-      }
-    );
-
-    // Wait for GSAP triggers to be ready
     const timeout = setTimeout(() => {
       ScrollTrigger.refresh();
       
@@ -70,12 +49,8 @@ export default function Navbar() {
           const scrollWidth = scrollRef.scrollWidth;
           const maxScroll = scrollWidth - viewportWidth;
           
-          // Use scroll progress if available from self (ScrollTrigger onUpdate), 
-          // otherwise fallback to property or current progress
           const progress = self ? self.progress : mainTrigger.progress;
           const scrollX = progress * maxScroll;
-          
-          // The center of the screen relative to the horizontal scroll container
           const viewportCenter = scrollX + viewportWidth / 2;
           
           let bestMatch = navItems[0].id;
@@ -88,10 +63,9 @@ export default function Navbar() {
               const width = element.offsetWidth;
               const center = start + width / 2;
               
-              // If the viewport center is inside the section, it's the winner
               if (viewportCenter >= start && viewportCenter <= start + width) {
                 bestMatch = item.id;
-                minDistance = -1; // Priority find
+                minDistance = -1;
               } else if (minDistance !== -1) {
                 const dist = Math.abs(viewportCenter - center);
                 if (dist < minDistance) {
@@ -114,60 +88,7 @@ export default function Navbar() {
           onUpdate: (self) => updateActiveState(self)
         });
 
-        // Run once initially with a small delay to ensure layout
         setTimeout(() => updateActiveState(), 100);
-
-          // Logo Animation: Center to Top
-          if (logoRef.current) {
-            gsap.set(logoRef.current, {
-              opacity: 0,
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              xPercent: -50,
-              yPercent: -50,
-              scale: 1,
-            });
-
-            // Entrance animation
-            gsap.to(logoRef.current, {
-              opacity: 1,
-              duration: 1.5,
-              ease: "expo.out",
-              delay: 0.5
-            });
-
-            // Move to Top Animation
-            gsap.to(logoRef.current, {
-              top: () => window.innerWidth < 768 ? '2rem' : '2.5rem', 
-              yPercent: -50,
-              scale: 0.25, 
-              ease: 'power2.inOut',
-              scrollTrigger: {
-                trigger: document.body,
-                start: 'top top',
-                end: () => window.innerHeight * 0.8, 
-                scrub: 1,
-                invalidateOnRefresh: true,
-              }
-            });
-          }
-
-          // Vertical Navigation Bar - Left Side
-        const navContainer = navContainerRef.current;
-        if (navContainer) {
-          gsap.fromTo(navContainer,
-            { x: -80, opacity: 0, rotateY: 45 },
-            { 
-              x: 0, 
-              opacity: 1, 
-              rotateY: 0,
-              duration: 1.2, 
-              ease: "expo.out",
-              delay: 3.2 
-            }
-          );
-        }
 
         return () => {
           scrollTrigger.kill();
@@ -178,42 +99,16 @@ export default function Navbar() {
     return () => clearTimeout(timeout);
   }, []);
 
-  // Magnetic Effect
-  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
-    const btn = itemsRef.current[index];
-    if (!btn) return;
-
-    const rect = btn.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-
-    gsap.to(btn, {
-      x: x * 0.3,
-      y: y * 0.3,
-      duration: 0.3,
-      ease: "power2.out"
-    });
-  };
-
-  const handleMouseLeave = (index: number) => {
-    const btn = itemsRef.current[index];
-    if (!btn) return;
-
-    gsap.to(btn, {
-      x: 0,
-      y: 0,
-      duration: 0.5,
-      ease: "elastic.out(1, 0.3)"
-    });
-    setHoveredItem(null);
-  };
-
   const scrollToSection = (index: number) => {
     const allTriggers = ScrollTrigger.getAll();
     const mainTrigger = allTriggers.find(t => t.pin || (t.vars && t.vars.pin));
     
     if (!mainTrigger) {
-      console.warn("Main scroll trigger not found");
+      const targetSection = document.getElementById(navItems[index].id);
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+        setActiveTab(navItems[index].id);
+      }
       return;
     }
 
@@ -249,11 +144,9 @@ export default function Navbar() {
       onStart: () => setActiveTab(targetId),
       onComplete: () => {
         isScrollingRef.current = false;
-        // Force one final check to be sure we're in the right place
         const allTriggers = ScrollTrigger.getAll();
         const main = allTriggers.find(t => t.pin || (t.vars && t.vars.pin));
         if (main) {
-          // Temporarily disable the ref to allow the final sync
           isScrollingRef.current = false;
         }
       }
@@ -261,85 +154,111 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed inset-0 z-[100] pointer-events-none">
-
-      {/* Dynamic Animated Logo */}
-      <div 
-        ref={logoRef}
-        onClick={() => scrollToSection(0)}
-        className="fixed top-1/2 left-1/2 font-display font-bold tracking-tighter pointer-events-auto cursor-pointer whitespace-nowrap z-[150] uppercase text-[7vw]"
+    <>
+      <nav 
+        className="fixed top-0 left-0 right-0 h-20 bg-neutral-950/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12 pointer-events-auto"
+        style={{ zIndex: 'var(--z-nav)' }}
       >
-        <span id="logo-text" className="bg-gradient-to-r from-pink-300 via-slate-500 to-purple-500 bg-clip-text text-transparent">
-          THE DOT
-        </span>
-      </div>
+        {/* Logo */}
+        <button 
+          onClick={() => scrollToSection(0)}
+          className="font-display font-bold text-xl md:text-2xl tracking-tighter uppercase"
+        >
+          <span className="bg-gradient-to-r from-pink-300 via-slate-500 to-purple-500 bg-clip-text text-transparent">
+            THE DOT
+          </span>
+        </button>
 
-      {/* Vertical Navigation Bar - Left Side */}
-      <div 
-        ref={navContainerRef}
-        className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 items-center pointer-events-auto bg-neutral-950/60 backdrop-blur-3xl p-1.5 md:p-2 rounded-full border border-white/10 shadow-[0_0_60px_rgba(0,0,0,0.8)]"
-      >
-        {navItems.map((item, idx) => (
-          <motion.button
-            key={item.id}
-            ref={(el) => (itemsRef.current[idx] = el as HTMLButtonElement)}
-            onClick={() => scrollToSection(idx)}
-            onMouseMove={(e) => {
-              handleMouseMove(e, idx);
-              setHoveredItem(item.id);
-            }}
-            onMouseLeave={() => handleMouseLeave(idx)}
-            whileTap={{ scale: 0.9 }}
-            className={cn(
-              "text-[8px] md:text-[10px] tracking-widest font-sans font-bold uppercase transition-all relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full group",
-              activeTab === item.id 
-                ? "text-black" 
-                : "text-neutral-300 hover:text-white"
-            )}
-          >
-            {/* Label on hover for vertical nav */}
-            <AnimatePresence>
-              {(hoveredItem === item.id || activeTab === item.id) && (
-                <motion.span 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  className="absolute left-full ml-3 px-3 py-1 bg-neutral-900/90 text-white backdrop-blur-md rounded-md border border-white/20 whitespace-nowrap pointer-events-none text-[10px] font-bold shadow-xl overflow-hidden"
-                >
-                  <ScrambleText text={item.label} duration={0.6} />
-                </motion.span>
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {navItems.map((item, idx) => (
+            <button
+              key={item.id}
+              onClick={() => scrollToSection(idx)}
+              className={cn(
+                "text-sm font-sans tracking-wide uppercase transition-colors relative py-2",
+                activeTab === item.id ? "text-white font-bold" : "text-neutral-400 hover:text-white"
               )}
-            </AnimatePresence>
+            >
+              {item.label}
+              {activeTab === item.id && (
+                <motion.div
+                  layoutId="active-nav-indicator"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-white rounded-t-full"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
+            </button>
+          ))}
+        </div>
 
-            <span className="relative z-10">{item.label[0]}</span>
-            
-            {activeTab === item.id && (
-              <motion.div
-                layoutId="active-pill-vertical"
-                className="absolute inset-0 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.5)]"
-                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              />
-            )}
-            
-            {/* Hover indicator pill */}
-            {hoveredItem === item.id && activeTab !== item.id && (
-              <motion.div
-                layoutId="hover-pill"
-                className="absolute inset-0 bg-white/10 rounded-full"
-                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              />
-            )}
+        {/* Right CTA */}
+        <div className="hidden md:flex items-center">
+          <button 
+            onClick={() => scrollToSection(navItems.findIndex(i => i.id === 'contact'))}
+            className="px-6 py-2.5 bg-white text-black font-sans font-bold text-xs tracking-widest uppercase rounded-full hover:bg-gray-200 transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+          >
+            Start a project
+          </button>
+        </div>
 
-            {activeTab === item.id && (
-              <motion.div
-                layoutId="active-glow-vertical"
-                className="absolute inset-0 bg-white/20 blur-xl rounded-full"
-                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              />
-            )}
-          </motion.button>
-        ))}
-      </div>
-    </nav>
+        {/* Hamburger Button (Mobile Only) */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+            className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white cursor-pointer"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed inset-x-0 top-20 bottom-0 bg-neutral-950 z-[150] pointer-events-auto flex flex-col items-center justify-start overflow-y-auto gap-8 p-12 pt-16 pb-24 safe-padding-bottom"
+          >
+            <div className="absolute inset-0 opacity-5 pointer-events-none noise-overlay" />
+            {navItems.map((item, idx) => (
+              <motion.button
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + idx * 0.05 }}
+                onClick={() => {
+                  scrollToSection(idx);
+                  setIsMobileMenuOpen(false);
+                }}
+                className={cn(
+                  "text-3xl font-display font-bold tracking-tighter uppercase transition-colors cursor-pointer",
+                  activeTab === item.id ? "text-white" : "text-neutral-600 hover:text-white"
+                )}
+              >
+                {item.label}
+              </motion.button>
+            ))}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + navItems.length * 0.05 }}
+              onClick={() => {
+                scrollToSection(navItems.findIndex(i => i.id === 'contact'));
+                setIsMobileMenuOpen(false);
+              }}
+              className="mt-4 px-8 py-4 bg-white text-black font-sans font-bold text-sm tracking-widest uppercase rounded-full cursor-pointer shrink-0"
+            >
+              Start a project
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

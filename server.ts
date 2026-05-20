@@ -4,7 +4,28 @@ import { createServer as createViteServer } from "vite";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
+import { rateLimit } from "express-rate-limit";
+import { z } from "zod";
+import DOMPurify from "isomorphic-dompurify";
+
 dotenv.config();
+
+// Fix 2: Contact Form Validation Schema
+const contactSchema = z.object({
+  name: z.string().min(1).max(100),
+  email: z.string().email().max(200),
+  message: z.string().max(2000).optional().default("No message provided"),
+  service: z.string().optional(),
+});
+
+// Fix 2: Rate Limiter
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per window
+  message: { error: "Too many requests. Please try again after 15 minutes." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 async function startServer() {
   const app = express();
@@ -13,12 +34,23 @@ async function startServer() {
   app.use(express.json());
 
   // API Email Route
-  app.post("/api/contact", async (req, res) => {
-    const { name, email, message, service } = req.body;
-
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: "Missing required fields" });
+  app.post("/api/contact", contactLimiter, async (req, res) => {
+    // Fix 2: Zod Validation
+    const result = contactSchema.safeParse(req.body);
+    
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: "Invalid input fields", 
+        details: result.error.format() 
+      });
     }
+
+    const { name, email, message, service } = result.data;
+
+    // Fix 2: Sanitization
+    const cleanName = DOMPurify.sanitize(name);
+    const cleanMessage = DOMPurify.sanitize(message || "No message provided");
+    const cleanService = service ? DOMPurify.sanitize(service) : "General";
 
     const userEmail = process.env.EMAIL_USER || 'thedotco.official@gmail.com';
     const userPass = process.env.EMAIL_PASS;
@@ -43,11 +75,11 @@ async function startServer() {
       });
 
       const mailOptions = {
-        from: `"${name}" <${userEmail}>`, // Using authenticated user email as 'from' for better deliverability
+        from: `"${cleanName}" <${userEmail}>`, // Using authenticated user email as 'from' for better deliverability
         to: 'thedotco.official@gmail.com',
         replyTo: email,
-        subject: `Contact: ${name} - ${service || 'General'}`,
-        text: `New message from ${name} (${email}):\n\n${message}\n\nInterested in: ${service || 'Not specified'}`,
+        subject: `Contact: ${cleanName} - ${cleanService}`,
+        text: `New message from ${cleanName} (${email}):\n\n${cleanMessage}\n\nInterested in: ${cleanService}`,
       };
 
       await transporter.sendMail(mailOptions);

@@ -1,222 +1,150 @@
+import React from 'react';
 import { motion } from 'motion/react';
-import { Send, Instagram, Twitter, Mail, MapPin, Linkedin } from 'lucide-react';
-import { useState, FormEvent } from 'react';
-import { cn } from '../../lib/utils';
+import { Mail, Instagram, Twitter, Linkedin, Copy, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
 import ScrambleText from '../ScrambleText';
-
-const ThreadsIcon = ({ className }: { className?: string }) => (
-  <svg 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className={className}
-  >
-    <path d="M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12V13.5C21 14.8807 19.8807 16 18.5 16C17.1193 16 16 14.8807 16 13.5V8.5C16 8.22386 15.7761 8 15.5 8C15.2239 8 15 8.22386 15 8.5V13.19C14.54 13.68 13.9 14 13.17 14C11.8 14 10.69 12.88 10.69 11.5V11.19C10.69 9.81 11.8 8.69 13.17 8.69H14" />
-  </svg>
-);
-
-const SERVICES = [
-  "Website Development",
-  "Mobile Application",
-  "UI/UX Design",
-  "Product Design",
-  "Branding Strategy",
-  "Social Media",
-  "Other"
-];
+import contactBack from '../../contact_back.png';
 
 export default function Contact() {
-  const [formState, setFormState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [selectedService, setSelectedService] = useState<string>('');
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
+  const [copied, setCopied] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setFormState('submitting');
-    setErrorMessage('');
-    
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, service: selectedService })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        if (data.mock) {
-          setFormState('success');
-          setErrorMessage('Live emails require setup: Add "EMAIL_PASS" in the Settings menu.');
-        } else {
-          setFormState('success');
-          setFormData({ name: '', email: '', message: '' });
-          setSelectedService('');
-        }
-      } else {
-        setFormState('error');
-        setErrorMessage(data.error || 'Failed to send message.');
-      }
-    } catch (error) {
-      console.error(error);
-      setFormState('error');
-      setErrorMessage('Network error. Please try again.');
-    }
+  const handleCopyEmail = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText('thedotco.official@gmail.com');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <section className="relative w-screen h-screen flex items-center justify-center flex-shrink-0 bg-transparent px-6 md:px-32 border-l border-white/5" id="contact">
-       {/* Background ambient glow */}
-       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-dot-purple/5 blur-[120px] rounded-full pointer-events-none" />
+    <section className="relative w-full md:w-screen min-h-[100dvh] flex flex-col justify-center flex-shrink-0 bg-transparent overflow-hidden" id="contact">
+       {/* Ambient contact background image */}
+       <div 
+         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none opacity-20 select-none" 
+         style={{ backgroundImage: `url(${contactBack})` }}
+       />
 
-       <div className="max-w-6xl w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
-          
-          {/* Left Side: Info */}
-          <div className="flex flex-col justify-center">
-            <div className="mb-12">
-              <h2 className="text-[clamp(2.5rem,6vw,5rem)] font-display font-bold tracking-tighter mb-4 leading-tight uppercase">
-                  <ScrambleText text="LET'S" duration={0.8} /> <span className="text-white"><ScrambleText text="BUILD" delay={0.4} duration={0.8} /></span>
-              </h2>
-              <p className="text-gray-500 uppercase tracking-widest font-bold text-[10px]">
-                <ScrambleText text="Experience the new standard of digital execution." delay={0.8} duration={1} />
-              </p>
-            </div>
+       {/* Depth gradients to guarantee exceptional text readability */}
+       <div className="absolute inset-0 z-0 bg-gradient-to-t from-neutral-950 via-neutral-950/65 to-neutral-950/80 pointer-events-none" />
+       
+       {/* Background ambient glow overlaying image */}
+       <div className="absolute top-1/2 left-[20%] -translate-x-1/2 -translate-y-1/2 w-[45vw] h-[45vw] bg-purple-500/10 blur-[130px] rounded-full pointer-events-none" />
+       <div className="absolute bottom-0 right-[15%] w-[35vw] h-[35vw] bg-blue-500/10 blur-[110px] rounded-full pointer-events-none" />
+
+       <div className="flex-1 flex items-center px-6 md:px-24 py-16 lg:py-0 border-l border-white/5 relative z-10 w-full">
+         <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center justify-between">
             
-            <div className="space-y-6 mb-10">
-              <div className="flex items-center gap-4 group cursor-pointer" onClick={() => window.location.href = 'mailto:thedotco.official@gmail.com'}>
-                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-white group-hover:text-black transition-all">
-                  <Mail className="w-4 h-4" />
-                </div>
-                <div>
-                  <p className="text-[9px] text-gray-500 uppercase tracking-widest font-bold mb-0.5">Email us</p>
-                  <p className="text-base font-display">thedotco.official@gmail.com</p>
-                </div>
-              </div>
+            {/* Left Column: Huge typography and availability details */}
+            <div className="lg:col-span-6 flex flex-col text-left items-start">
+               <div className="mb-4 flex items-center gap-2">
+                 <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse shadow-[0_0_8px_#a855f7]" />
+                 <span className="text-[10px] text-purple-400 font-mono tracking-widest uppercase font-semibold">GET IN TOUCH</span>
+               </div>
+               
+               <h2 className="text-[44px] md:text-[clamp(3.5rem,6vw,5.5rem)] font-display font-bold tracking-tighter mb-6 leading-[1.05] uppercase">
+                   <span className="text-white drop-shadow-lg block">
+                       <ScrambleText text="LET'S" duration={0.8} />
+                   </span>
+                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-indigo-200 to-white drop-shadow-lg block">
+                       <ScrambleText text="BUILD" delay={0.4} duration={0.8} />
+                   </span>
+               </h2>
+               
+               <p className="text-gray-400 font-sans text-sm md:text-base leading-relaxed max-w-md">
+                 Tell us what you're building. <span className="text-white font-medium">We'll show you how we make it extraordinary.</span> Let's collaborate to engineer an experience that leaves a lasting impression.
+               </p>
 
-              <div className="flex items-center gap-4 group cursor-pointer">
-                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-white group-hover:text-black transition-all">
-                  <MapPin className="w-4 h-4" />
-                </div>
-                <div>
-                  <p className="text-[9px] text-gray-500 uppercase tracking-widest font-bold mb-0.5">Our Location</p>
-                  <p className="text-base font-display">Remote Anywhere</p>
-                </div>
-              </div>
+               {/* Availability Badges */}
+               <div className="flex flex-wrap gap-3 mt-8">
+                 <div className="px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-mono flex items-center gap-2">
+                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                   Available for select projects
+                 </div>
+                 <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[11px] font-mono">
+                   Collaborating globally
+                 </div>
+               </div>
             </div>
 
-            <div className="flex gap-4">
-              {[
-                { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/the_dot._official?igsh=MTBucWo2MjY5YmUyZw==' },
-                { icon: Twitter, label: 'Twitter', href: '#' },
-                { icon: Linkedin, label: 'LinkedIn', href: '#' },
-                { icon: ThreadsIcon, label: 'Threads', href: 'https://www.threads.net/@the_dot._official' }
-              ].map((social, i) => (
-                <motion.a
-                  key={i}
-                  whileHover={{ y: -5 }}
-                  className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:border-white/40 transition-colors"
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <social.icon className="w-4 h-4" />
-                </motion.a>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Side: Form */}
-          <div className="bg-neutral-900/40 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-2xl">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <input 
-                  type="text" 
-                  placeholder="NAME"
-                  required
-                  value={formData.name}
-                  onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-white/5 border border-white/10 p-3 rounded-lg w-full focus:outline-none focus:border-white transition-colors font-sans text-[10px] uppercase font-bold tracking-widest"
-                />
-                <input 
-                  type="email" 
-                  placeholder="EMAIL"
-                  required
-                  value={formData.email}
-                  onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-white/5 border border-white/10 p-3 rounded-lg w-full focus:outline-none focus:border-white transition-colors font-sans text-[10px] uppercase font-bold tracking-widest"
-                />
-              </div>
-
-              <div>
-                <p className="text-[9px] text-gray-500 uppercase tracking-widest font-bold mb-2">QUICK TOPICS</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {SERVICES.map(service => (
-                    <button
-                      key={service}
-                      type="button"
-                      onClick={() => {
-                        setSelectedService(service);
-                        setFormData(prev => ({
-                          ...prev,
-                          message: prev.message ? `${prev.message}\nInterested in: ${service}` : `I'm interested in ${service}. `
-                        }));
-                      }}
-                      className={cn(
-                        "px-3 py-1.5 rounded-full border text-[8px] uppercase font-bold tracking-widest transition-all",
-                        selectedService === service 
-                          ? "bg-white text-black border-white"
-                          : "bg-transparent text-gray-400 border-white/10 hover:border-white/30"
-                      )}
+            {/* Right Column: Premium Glassmorphic Card dashboard */}
+            <div className="lg:col-span-6 w-full">
+              <div className="w-full bg-white/[0.02] backdrop-blur-xl border border-white/[0.06] rounded-[2rem] p-6 md:p-8 shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
+                
+                {/* Interactive Email Card */}
+                <div className="mb-6">
+                  <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-3">Primary Channel</p>
+                  <motion.div 
+                    className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-purple-500/40 hover:bg-white/[0.06] transition-all cursor-pointer group relative overflow-hidden"
+                    whileHover={{ y: -3 }}
+                    onClick={() => window.location.href = 'mailto:thedotco.official@gmail.com'}
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform duration-300">
+                      <Mail className="w-5 h-5 text-purple-300 group-hover:text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0 text-left">
+                      <p className="text-[11px] text-gray-500 uppercase tracking-widest font-bold mb-0.5">Email us</p>
+                      <p className="text-[12px] md:text-[13px] font-display text-gray-300 group-hover:text-white transition-colors truncate">
+                        thedotco.official@gmail.com
+                      </p>
+                    </div>
+                    <button 
+                      onClick={handleCopyEmail}
+                      className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors relative z-10"
+                      aria-label="Copy email address"
                     >
-                      {service}
+                      {copied ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-gray-500 group-hover:text-white" />}
                     </button>
-                  ))}
+                  </motion.div>
+                </div>
+
+                {/* Social Channels Row */}
+                <div className="mb-6">
+                  <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-3">Direct Platforms</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    {[
+                      { icon: Instagram, label: 'Instagram', name: '@the_dot._official', href: 'https://www.instagram.com/the_dot._official?igsh=MTBjZDdyODRmcWpzcw==' },
+                      { icon: Twitter, label: 'X (Twitter)', name: '@thedot_official', href: 'https://x.com/thedot_official' },
+                      { icon: Linkedin, label: 'LinkedIn', name: 'The Dot', href: 'https://www.linkedin.com/in/the-dot-757b2040b?utm_source=share_via&utm_content=profile&utm_medium=member_android' }
+                    ].map((social, i) => (
+                      <motion.a
+                        key={i}
+                        whileHover={{ y: -4, backgroundColor: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(168, 85, 247, 0.3)' }}
+                        whileTap={{ scale: 0.98 }}
+                        className="flex flex-col items-center text-center p-3 rounded-xl border border-white/[0.04] bg-white/[0.01] transition-all duration-300 group"
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={social.label}
+                      >
+                        <social.icon className="w-5 h-5 text-gray-400 group-hover:text-purple-400 transition-colors mb-2" />
+                        <span className="text-[10px] text-gray-200 font-semibold leading-none">{social.label}</span>
+                        <span className="text-[8px] text-gray-500 mt-1 truncate max-w-full w-full">{social.name}</span>
+                      </motion.a>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Core Philosophy Quote */}
+                <div className="pt-5 border-t border-white/[0.05] text-left">
+                  <p className="text-[10px] text-gray-500 leading-relaxed italic font-serif">
+                    "Design is not just what it looks like and feels like. Design is how it works. Let's make it work beautifully."
+                  </p>
                 </div>
               </div>
+            </div>
 
-              <textarea 
-                rows={4}
-                placeholder="YOUR MESSAGE..."
-                required
-                value={formData.message}
-                onChange={e => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                className="bg-white/5 border border-white/10 p-3 rounded-lg w-full focus:outline-none focus:border-white transition-colors font-sans text-[10px] uppercase font-bold tracking-widest resize-none"
-              />
-              
-              <button 
-                type="submit"
-                disabled={formState === 'submitting'}
-                className="w-full bg-white text-black py-3 rounded-lg font-sans font-bold text-[10px] tracking-widest uppercase flex items-center justify-center gap-2 hover:bg-neutral-200 transition-all disabled:opacity-50"
-              >
-                {formState === 'idle' && (
-                  <>
-                    SEND MESSAGE <Send className="w-3 h-3" />
-                  </>
-                )}
-                {formState === 'submitting' && 'SENDING...'}
-                {formState === 'success' && (errorMessage ? 'SENT (DEMO)' : 'SENT SUCCESSFULLY!')}
-                {formState === 'error' && (errorMessage || 'ERROR SENDING.')}
-              </button>
-              
-              {(formState === 'error' || (formState === 'success' && errorMessage)) && (
-                <p className={cn(
-                  "text-[9px] uppercase font-bold tracking-widest text-center mt-2",
-                  formState === 'error' ? "text-red-400" : "text-emerald-400"
-                )}>
-                  {errorMessage}
-                </p>
-              )}
-            </form>
-          </div>
+         </div>
+       </div>
+
+       {/* Footer Micro-strip */}
+       <div className="w-full border-t border-white/5 bg-neutral-950/50 backdrop-blur-md py-4 px-6 relative z-10 mt-auto">
+         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-gray-500 font-sans tracking-wide">
+           <p>© 2025 The Dot. All rights reserved.</p>
+           <div className="flex items-center gap-4">
+             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+             <span>·</span>
+             <a href="mailto:thedotco.official@gmail.com" className="hover:text-white transition-colors">thedotco.official@gmail.com</a>
+           </div>
+         </div>
        </div>
     </section>
   );
