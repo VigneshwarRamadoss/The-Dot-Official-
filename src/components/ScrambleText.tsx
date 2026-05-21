@@ -8,14 +8,28 @@ interface ScrambleTextProps {
   delay?: number;
   duration?: number;
   trigger?: boolean;
+  once?: boolean; // M-1: add once prop
 }
 
 const CHARS = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789!@#$%^&*()_+';
 
-export default function ScrambleText({ text, className, delay = 0, duration = 1, trigger = true }: ScrambleTextProps) {
+export default function ScrambleText({ text, className, delay = 0, duration = 1, trigger = true, once = true }: ScrambleTextProps) {
   const containerRef = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(containerRef, { once: false, amount: 0.2 });
+  // M-1: Default once to true instead of false
+  const isInView = useInView(containerRef, { once, amount: 0.2 });
   const [displayText, setDisplayText] = useState(text);
+  
+  // H-18: RAF ref to debounce React renders
+  const rafRef = useRef<number>(0);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (!trigger || !isInView) {
@@ -48,10 +62,16 @@ export default function ScrambleText({ text, className, delay = 0, duration = 1,
           if (char === ' ' || char === '\n') return char;
           return CHARS[Math.floor(Math.random() * CHARS.length)];
         }).join('');
-        setDisplayText(scrambled);
+        
+        // H-18: Batch React state updates using RAF instead of firing at 60fps
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(() => {
+          if (mountedRef.current) setDisplayText(scrambled);
+        });
       },
       onComplete: () => {
-        setDisplayText(text);
+        cancelAnimationFrame(rafRef.current);
+        if (mountedRef.current) setDisplayText(text);
       }
     });
 

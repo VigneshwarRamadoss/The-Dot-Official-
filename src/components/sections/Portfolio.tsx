@@ -57,9 +57,18 @@ export default function Portfolio() {
           {caseStudies.map((project) => (
             <motion.div 
               key={project.id}
+              role="button"
+              tabIndex={0}
+              aria-label={`View case study: ${project.title}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setActiveStudy(project);
+                }
+              }}
               whileHover={{ scale: 0.98 }}
               onClick={() => setActiveStudy(project)}
-              className="group relative w-[80vw] min-w-[80vw] md:w-[35vw] md:min-w-[35vw] aspect-[4/3] md:h-full overflow-hidden cursor-pointer bg-neutral-900 snap-center rounded-2xl border border-white/[0.03] hover:border-purple-500/20 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.37)]"
+              className="group relative w-[80vw] min-w-[80vw] md:w-[35vw] md:min-w-[35vw] aspect-[4/3] md:h-full overflow-hidden cursor-pointer bg-neutral-900 snap-center rounded-2xl border border-white/[0.03] hover:border-purple-500/20 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.37)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-400 focus-visible:outline-offset-2"
             >
               <img 
                 src={project.img} 

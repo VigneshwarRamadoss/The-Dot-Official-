@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Mail, Instagram, Twitter, Linkedin, Copy, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import ScrambleText from '../ScrambleText';
-import contactBack from '../../contact_back.png';
+import contactBack from '../../contact_back.webp';
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
@@ -88,7 +88,7 @@ export default function Contact() {
                     </div>
                     <button 
                       onClick={handleCopyEmail}
-                      className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors relative z-10"
+                      className="p-3 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors relative z-10 min-w-[44px] min-h-[44px] flex items-center justify-center"
                       aria-label="Copy email address"
                     >
                       {copied ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-gray-500 group-hover:text-white" />}

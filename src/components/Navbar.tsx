@@ -3,10 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { Menu, X } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+import { useScrollRef } from '../context/ScrollRefContext';
 
 const navItems = [
   { id: 'hero', label: 'Home' },
@@ -14,6 +12,7 @@ const navItems = [
   { id: 'services', label: 'Services' },
   { id: 'work', label: 'Work' },
   { id: 'team', label: 'Team' },
+  { id: 'why', label: 'Why Us?' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -22,6 +21,8 @@ export default function Navbar() {
   const activeTabRef = useRef('hero');
   const isScrollingRef = useRef(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // H-6: Use React context ref instead of fragile document.querySelector
+  const scrollRef = useScrollRef();
 
   useEffect(() => {
     activeTabRef.current = activeTab;
@@ -39,14 +40,15 @@ export default function Navbar() {
       const mainTrigger = findMainTrigger();
       
       if (mainTrigger) {
-        const updateActiveState = (self?: any) => {
+        const updateActiveState = (self?: ScrollTrigger) => {
           if (isScrollingRef.current) return;
           
-          const scrollRef = document.querySelector('.flex-nowrap') as HTMLElement;
-          if (!scrollRef || !mainTrigger) return;
+          // H-6: Use context ref instead of document.querySelector
+          const scrollEl = scrollRef.current;
+          if (!scrollEl || !mainTrigger) return;
           
           const viewportWidth = window.innerWidth;
-          const scrollWidth = scrollRef.scrollWidth;
+          const scrollWidth = scrollEl.scrollWidth;
           const maxScroll = scrollWidth - viewportWidth;
           
           const progress = self ? self.progress : mainTrigger.progress;
@@ -97,7 +99,7 @@ export default function Navbar() {
     }, 3200); 
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [scrollRef]);
 
   const scrollToSection = (index: number) => {
     const allTriggers = ScrollTrigger.getAll();
@@ -112,16 +114,17 @@ export default function Navbar() {
       return;
     }
 
-    const scrollRef = document.querySelector('.flex-nowrap') as HTMLElement;
+    // H-6: Use context ref instead of document.querySelector
+    const scrollEl = scrollRef.current;
     const targetSection = document.getElementById(navItems[index].id);
-    if (!scrollRef || !targetSection) return;
+    if (!scrollEl || !targetSection) return;
 
-    const totalWidth = scrollRef.scrollWidth - window.innerWidth;
+    const totalWidth = scrollEl.scrollWidth - window.innerWidth;
     const sectionWidth = targetSection.offsetWidth;
     const targetX = targetSection.offsetLeft;
     const targetId = navItems[index].id;
     
-    const sectionsToStart = ['hero', 'about', 'services', 'work', 'why', 'contact'];
+    const sectionsToStart = ['hero', 'about', 'services', 'work', 'team', 'why', 'contact'];
     let optimizedTargetX = targetX;
     
     if (!sectionsToStart.includes(targetId)) {
@@ -131,8 +134,8 @@ export default function Navbar() {
     optimizedTargetX = Math.max(0, Math.min(optimizedTargetX, totalWidth));
     const progress = optimizedTargetX / totalWidth;
     
-    const start = mainTrigger.start;
-    const end = mainTrigger.end;
+    const start = mainTrigger.start as number;
+    const end = mainTrigger.end as number;
     const scrollDistance = end - start;
     const targetProgress = start + (scrollDistance * progress);
     
@@ -159,7 +162,7 @@ export default function Navbar() {
         className="fixed top-0 left-0 right-0 h-20 bg-neutral-950/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12 pointer-events-auto"
         style={{ zIndex: 'var(--z-nav)' }}
       >
-        {/* Logo */}
+        {/* Logo — C-3: Use font-display token instead of arbitrary font-['Montserrat'] */}
         <button 
           onClick={() => scrollToSection(0)}
           className="font-display font-bold text-xl md:text-2xl tracking-tighter uppercase"

@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Target, Zap, Shield, Brain, Network } from 'lucide-react';
 import gsap from 'gsap';
 import ScrambleText from '../ScrambleText';
-import whyUsBack from '../../whyusbg.png';
+import whyUsBack from '../../whyusbg.webp';
 
 const values = [
   { icon: Zap, title: 'Fast Execution', desc: 'We ship products at lightning speed without compromising quality.', color: 'from-blue-500 to-cyan-400' },

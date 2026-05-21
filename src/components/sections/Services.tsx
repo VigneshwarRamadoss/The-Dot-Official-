@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Smartphone, Globe, PenTool, Layout, Zap, Share2 } from 'lucide-react';
 import gsap from 'gsap';
 import ScrambleText from '../ScrambleText';
-import craftBack from '../../craftworkbg.png';
+import craftBack from '../../craftworkbg.webp';
 
 const services = [
   { icon: Smartphone, title: 'Mobile App Development', desc: 'Sleek, native performance for iOS and Android.' },

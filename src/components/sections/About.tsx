@@ -2,8 +2,6 @@ import { useRef, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function About() {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -105,7 +103,7 @@ export default function About() {
           ref={titleRef}
           className="text-[clamp(1.75rem,5vw,3.5rem)] font-serif font-bold mb-8 tracking-tight leading-tight text-black"
         >
-          Where India's best businesses begin.
+          Where the world's best businesses begin.
         </h2>
 
         {/* Body Copy */}

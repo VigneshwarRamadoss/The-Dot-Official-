@@ -3,10 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'motion/react';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useSmoothScroll } from './hooks/useSmoothScroll';
 import { HorizontalScroll } from './components/HorizontalScroll';
+import { ScrollRefContext } from './context/ScrollRefContext';
 import Navbar from './components/Navbar';
 import Hero from './components/sections/Hero';
 import About from './components/sections/About';
@@ -20,6 +23,8 @@ import Loader from './components/Loader';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
+  // H-6: Shared ref for the horizontal scroll container
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   useSmoothScroll();
 
   useEffect(() => {
@@ -41,6 +46,10 @@ export default function App() {
 
   return (
     <>
+      {/* M-4: Vercel Analytics & Speed Insights */}
+      <Analytics />
+      <SpeedInsights />
+
       <AnimatePresence mode="wait">
         {isLoading && <Loader key="loader" />}
       </AnimatePresence>
@@ -50,20 +59,22 @@ export default function App() {
         Skip to content
       </a>
       <main id="main-content" className="selection:bg-dot-blue selection:text-white relative">
-        <Navbar />
-        <Cursor />
+        {/* H-6: Provide scroll container ref to Navbar via context */}
+        <ScrollRefContext.Provider value={scrollContainerRef}>
+          <Navbar />
+          <Cursor />
 
-        <HorizontalScroll>
-          <Hero />
-          <About />
-          <Services />
-          <Portfolio />
-          <Team />
-          <WhyUs />
-          <Contact />
-        </HorizontalScroll>
+          <HorizontalScroll scrollRef={scrollContainerRef}>
+            <Hero />
+            <About />
+            <Services />
+            <Portfolio />
+            <Team />
+            <WhyUs />
+            <Contact />
+          </HorizontalScroll>
+        </ScrollRefContext.Provider>
       </main>
     </>
   );
 }
-

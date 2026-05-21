@@ -1,14 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import Lenis from 'lenis';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export function useSmoothScroll() {
+  // C-2: Ref guard prevents duplicate Lenis instances on StrictMode double-mount
+  const lenisRef = useRef<Lenis | null>(null);
+
   useEffect(() => {
     // FIX 2: Lenis smooth scroll is only useful on desktop where horizontal
     // pin is active. On mobile, native scroll provides better UX (esp. iOS momentum).
     const isMobile = window.matchMedia("(max-width: 767px)").matches;
     if (isMobile) return;
+
+    // StrictMode guard: skip if already initialized
+    if (lenisRef.current) return;
 
     const lenis = new Lenis({
       duration: 1.5, // Increased from 1.2 to 1.5 for a more buttery, elegant flow
@@ -20,6 +26,8 @@ export function useSmoothScroll() {
       touchMultiplier: 1.5,
       infinite: false,
     });
+
+    lenisRef.current = lenis;
 
     // Sync Lenis scroll updates with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
@@ -38,6 +46,7 @@ export function useSmoothScroll() {
     return () => {
       gsap.ticker.remove(updateTicker);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
 }

@@ -69,7 +69,7 @@ If your onboarding or checkout isn't converting the way it should — that's a f
   {
     name: 'Subash Chandra Bose',
     role: 'Co-Founder',
-    img: 'photos/subash.png',
+    img: 'photos/subash.webp',
     bio: "Most designers make things look good. I make things work — and then make them look good.",
     accent: 'from-cyan-400 to-blue-500', // Co-Founder cyan
     accentGlow: 'rgba(34,211,238,0.35)',

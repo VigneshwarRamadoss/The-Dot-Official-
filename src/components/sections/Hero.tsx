@@ -4,9 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
 import ScrambleText from '../ScrambleText';
 import { ArrowRight } from 'lucide-react';
-import heroBack from '../../herobackg.png';
-
-gsap.registerPlugin(ScrollTrigger);
+import heroBack from '../../herobackg.webp';
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -100,7 +98,8 @@ export default function Hero() {
       {/* Background Texture (Grid pattern on top of overlay but below text) */}
       <div className="absolute inset-0 bg-grid pointer-events-none z-1" />
 
-      <div className="relative z-10 flex flex-col items-start justify-center h-full pt-20 pb-8">
+      {/* H-23: Apply landscape:pt-14 landscape:pb-4 to prevent overflow on short landscape screens */}
+      <div className="relative z-10 flex flex-col items-start justify-center h-full pt-20 pb-8 landscape:pt-14 landscape:pb-4">
 
         {/* Eyebrow Label */}
         <span className="text-[10px] sm:text-xs md:text-sm font-sans tracking-[0.2em] text-neutral-400 uppercase mb-4 md:mb-6 block">
@@ -111,17 +110,12 @@ export default function Hero() {
         <h1
           ref={textRef}
           className="font-serif text-white mb-2 leading-[1.15]"
-          style={{ fontSize: 'clamp(2rem, 10vw, 5rem)' }}
+          // H-23: Adjust min clamp size for better landscape fit
+          style={{ fontSize: 'clamp(1.5rem, 8vw, 5rem)' }}
         >
-          Where India's best businesses begin.
+          Where the world's best businesses begin.
         </h1>
 
-        {/* Brand Name */}
-        <div className="text-lg sm:text-xl md:text-3xl font-display font-bold tracking-tighter uppercase mb-6 md:mb-8">
-          <span className="bg-gradient-to-r from-pink-300 via-slate-500 to-purple-500 bg-clip-text text-transparent">
-            THE DOT
-          </span>
-        </div>
 
         {/* Subheading */}
         <div className="text-sm md:text-base lg:text-lg font-sans text-neutral-300 max-w-[480px] mb-8 md:mb-10 leading-relaxed">

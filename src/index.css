@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+/* H-20: Google Fonts @import removed to prevent render-blocking. Now loaded via <link rel="preload"> in index.html */
 
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat", sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   
   --color-matte-black: #0A0A0A;
@@ -58,6 +58,20 @@
   textarea,
   select {
     font-size: max(16px, 1rem) !important;
+  }
+
+  /* C-4: Safari <16 needs -webkit- prefix for backdrop-filter */
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    [class*="backdrop-blur"] {
+      -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+    }
+  }
+
+  /* C-4: Firefox fallback — solid background where backdrop-filter not supported */
+  @supports not (backdrop-filter: blur(1px)) {
+    .backdrop-blur-xl, .backdrop-blur-md, .backdrop-blur-sm {
+      background-color: rgba(10, 10, 10, 0.85) !important;
+    }
   }
 }
 
@@ -145,6 +159,11 @@
   .custom-cursor {
     display: none;
   }
+}
+
+/* H-23: Additional safeguard for short landscape devices (iPhone SE) */
+@media (orientation: landscape) and (max-height: 500px) {
+  #hero h1 { font-size: clamp(1.25rem, 6vw, 2.5rem) !important; }
 }
 
 /* Custom scrollbar utility */
