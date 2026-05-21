@@ -84,7 +84,7 @@ export default function ScrambleText({ text, className, delay = 0, duration = 1,
     <span 
       ref={containerRef} 
       className={className} 
-      style={{ display: 'inline-block' }}
+      style={{ display: 'inline' }}
     >
       {displayText}
     </span>

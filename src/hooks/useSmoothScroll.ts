@@ -43,8 +43,22 @@ export function useSmoothScroll() {
     // Disable lagSmoothing to prevent horizontal layout offsets during micro frame drops
     gsap.ticker.lagSmoothing(0);
 
+    // Refresh ScrollTrigger after all page assets/images have fully loaded
+    // This prevents layout shifts from asynchronous image loading breaking ScrollTrigger coordinates in production.
+    const handleLoad = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('load', handleLoad);
+
+    // Dynamic content/fonts loading fallback
+    const refreshTimeout = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 1500);
+
     return () => {
       gsap.ticker.remove(updateTicker);
+      window.removeEventListener('load', handleLoad);
+      clearTimeout(refreshTimeout);
       lenis.destroy();
       lenisRef.current = null;
     };
