@@ -30,7 +30,7 @@ export default function About() {
             trigger: containerRef.current,
             start: () => `+=${window.innerWidth * 0.5}`,
             end: () => `+=${window.innerWidth * 1.5}`,
-            scrub: 0.1,
+            scrub: true,
             invalidateOnRefresh: true,
           }
         });

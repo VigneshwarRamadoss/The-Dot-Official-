@@ -35,7 +35,7 @@ export default function Hero() {
               trigger: containerRef.current,
               start: 'top top',
               end: () => `+=${window.innerWidth * 0.6}`,
-              scrub: 0.1,
+              scrub: true,
               invalidateOnRefresh: true,
             },
             stagger: { each: 0.01, from: 'random' },

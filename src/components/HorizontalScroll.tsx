@@ -36,22 +36,25 @@ export const HorizontalScroll: React.FC<HorizontalScrollProps> = ({ children, sc
         scrollTrigger: {
           trigger: containerRef.current!,
           pin: true,
-          scrub: 0.1,
+          scrub: true,
           invalidateOnRefresh: true,
           start: 'top top',
           end: () => `+=${actualScrollRef.current!.scrollWidth - window.innerWidth}`,
         },
       });
 
+      let timeoutId: ReturnType<typeof setTimeout>;
       const resizeObserver = new ResizeObserver(() => {
-        requestAnimationFrame(() => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
           ScrollTrigger.refresh();
-        });
+        }, 200);
       });
 
       resizeObserver.observe(actualScrollRef.current!);
 
       return () => {
+        clearTimeout(timeoutId);
         resizeObserver.disconnect();
         animation.kill();
       };

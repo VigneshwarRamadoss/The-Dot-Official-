@@ -50,7 +50,7 @@
 
 @layer base {
   body {
-    @apply bg-matte-black text-white selection:bg-dot-blue selection:text-white antialiased overflow-x-hidden;
+    @apply bg-matte-black text-white selection:bg-dot-blue selection:text-white antialiased;
   }
 
   /* FIX 1: Prevent iOS Safari zoom-lock on form inputs */

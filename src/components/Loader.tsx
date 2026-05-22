@@ -1,7 +1,16 @@
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import Logo from "./logo.svg";
 
 export default function Loader() {
+  // Prevent scrolling while the loader is active
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 1 }}

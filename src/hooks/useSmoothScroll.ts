@@ -17,6 +17,7 @@ export function useSmoothScroll() {
     if (lenisRef.current) return;
 
     const lenis = new Lenis({
+      autoRaf: false, // Fix double raf issue with GSAP ticker
       duration: 1.5, // Increased from 1.2 to 1.5 for a more buttery, elegant flow
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Organic deceleration curve
       orientation: 'vertical', // We scroll vertically to drive horizontal movement
