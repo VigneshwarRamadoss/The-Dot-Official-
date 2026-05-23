@@ -103,7 +103,7 @@ export default function Contact() {
                     {[
                       { icon: Instagram, label: 'Instagram', name: '@the_dot._official', href: 'https://www.instagram.com/the_dot._official?igsh=MTBjZDdyODRmcWpzcw==' },
                       { icon: Twitter, label: 'X (Twitter)', name: '@thedot_official', href: 'https://x.com/thedot_official' },
-                      { icon: Linkedin, label: 'LinkedIn', name: 'The Dot', href: 'https://www.linkedin.com/in/the-dot-757b2040b?utm_source=share_via&utm_content=profile&utm_medium=member_android' }
+                      { icon: Linkedin, label: 'LinkedIn', name: 'The Dot', href: 'https://www.linkedin.com/company/the-dotco/' }
                     ].map((social, i) => (
                       <motion.a
                         key={i}

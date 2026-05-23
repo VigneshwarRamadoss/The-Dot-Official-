@@ -112,7 +112,7 @@ export default function WhyUs() {
           </span>
           <h2 className="text-[clamp(3.5rem,10vw,8rem)] font-display font-bold tracking-tighter mb-6 leading-none uppercase">
             <ScrambleText text="WHY" duration={0.8} /> <br/>
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">
+            <span className="inline-block bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">
               <ScrambleText text="US?" delay={0.3} duration={1} />
             </span>
           </h2>

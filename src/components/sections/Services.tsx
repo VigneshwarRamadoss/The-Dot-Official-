@@ -115,7 +115,7 @@ export default function Services() {
           
           <h2 className="text-[clamp(2.875rem,7.5vw,5.75rem)] font-display font-bold tracking-tighter mb-8 uppercase leading-none">
             <ScrambleText text="OUR" duration={0.8} /> <br/>
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">
+            <span className="inline-block bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">
               <ScrambleText text="CRAFT" delay={0.3} duration={1} />
             </span>
           </h2>

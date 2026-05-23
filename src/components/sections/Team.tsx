@@ -267,7 +267,7 @@ export default function Team() {
           </motion.p>
           <h2 className="text-[42px] sm:text-[52px] md:text-[clamp(2.5rem,7vw,5.5rem)] font-display font-bold tracking-tighter uppercase leading-[1.1] md:leading-[0.9]">
             <ScrambleText text="MEET THE" duration={0.8} />{' '}
-            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="inline-block bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
               <ScrambleText text="BRAINS" delay={0.4} duration={0.8} />
             </span>
           </h2>
