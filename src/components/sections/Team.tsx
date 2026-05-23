@@ -314,20 +314,20 @@ export default function Team() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                className="relative w-full h-full md:h-[600px] md:max-h-[85vh] max-w-[780px] overflow-hidden md:rounded-2xl border border-white/10 bg-neutral-900 shadow-2xl flex flex-col md:flex-row z-10"
+                className="relative w-full h-full lg:h-[600px] lg:max-h-[85vh] max-w-[780px] overflow-hidden lg:rounded-2xl border border-white/10 bg-neutral-900 shadow-2xl flex flex-col lg:flex-row z-10"
               >
                 {/* Close Button */}
                 <button
                   onClick={() => setSelectedMember(null)}
                   aria-label="Close modal"
-                  className="absolute top-4 right-4 z-50 flex h-11 w-11 md:h-8 md:w-8 items-center justify-center rounded-full bg-black/50 text-white/70 backdrop-blur-md transition-colors hover:bg-black/80 hover:text-white safe-top-margin cursor-pointer"
+                  className="absolute top-4 right-4 z-50 flex h-11 w-11 lg:h-8 lg:w-8 items-center justify-center rounded-full bg-black/50 text-white/70 backdrop-blur-md transition-colors hover:bg-black/80 hover:text-white safe-top-margin cursor-pointer"
                 >
-                  <X className="h-5.5 w-5.5 md:h-4 md:w-4" />
+                  <X className="h-5.5 w-5.5 lg:h-4 lg:w-4" />
                 </button>
 
                 {/* Image Section */}
-                <div className="relative h-[200px] md:h-full w-full md:w-[40%] shrink-0 overflow-hidden">
-                  <div className="absolute inset-0 z-10 bg-gradient-to-t from-neutral-900 to-transparent md:bg-gradient-to-r" />
+                <div className="relative h-[200px] lg:h-full w-full lg:w-[40%] shrink-0 overflow-hidden">
+                  <div className="absolute inset-0 z-10 bg-gradient-to-t from-neutral-900 to-transparent lg:bg-gradient-to-r" />
                   <img
                     src={selectedMember.img}
                     alt={selectedMember.name}
@@ -340,7 +340,7 @@ export default function Team() {
                 </div>
 
                 {/* Content Section */}
-                <div className="relative flex flex-col w-full md:w-[60%] h-[calc(100%-200px)] md:h-full overflow-hidden">
+                <div className="relative flex flex-col w-full lg:w-[60%] h-[calc(100%-200px)] lg:h-full overflow-hidden">
                   <div 
                     ref={modalScrollRef}
                     data-lenis-prevent

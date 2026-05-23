@@ -35,9 +35,9 @@ export default function Portfolio() {
   }, []);
 
   return (
-    <section className="relative w-full md:w-max md:min-w-[100vw] min-h-[100dvh] md:h-screen h-auto flex flex-col md:flex-row items-center px-5 md:px-32 flex-shrink-0 border-l border-white/5" id="work">
-      <div className="flex flex-col md:flex-row gap-8 md:gap-32 h-auto md:h-[75vh] items-start md:items-center py-20 md:py-0 w-full md:w-max">
-        <div className="w-full md:w-[35vw] flex-shrink-0 flex flex-col justify-center text-left">
+    <section className="relative w-full lg:w-max lg:min-w-[100vw] min-h-[100dvh] lg:h-screen h-auto flex flex-col lg:flex-row items-center px-6 lg:px-32 flex-shrink-0 border-l border-white/5" id="work">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-32 h-auto lg:h-[75vh] items-start lg:items-center py-20 lg:py-0 w-full lg:w-max">
+        <div className="w-full lg:w-[35vw] flex-shrink-0 flex flex-col justify-center text-left">
           <h2 className="text-[clamp(3.25rem,9vw,7.5rem)] font-display font-bold tracking-tighter mb-8 leading-none uppercase">
             <ScrambleText text="SELECTED" duration={0.8} /> <br/>
             <span className="inline-block text-gradient-blue">
@@ -54,7 +54,7 @@ export default function Portfolio() {
           </div>
         </div>
 
-        <div className="flex flex-row gap-8 md:gap-12 h-full md:pr-20 w-full md:w-max overflow-x-auto md:overflow-visible snap-x snap-mandatory scrollbar-hide pb-4 md:pb-0">
+        <div className="flex flex-row gap-8 lg:gap-12 h-full lg:pr-20 w-full lg:w-max overflow-x-auto lg:overflow-visible snap-x snap-mandatory scrollbar-hide pb-4 lg:pb-0">
           {caseStudies.map((project) => (
             <motion.div 
               key={project.id}
@@ -69,7 +69,7 @@ export default function Portfolio() {
               }}
               whileHover={{ scale: 0.98 }}
               onClick={() => setActiveStudy(project)}
-              className="group relative w-[80vw] min-w-[80vw] md:w-[35vw] md:min-w-[35vw] aspect-[4/3] md:h-full overflow-hidden cursor-pointer bg-neutral-900 snap-center rounded-2xl border border-white/[0.03] hover:border-purple-500/20 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.37)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-400 focus-visible:outline-offset-2"
+              className="group relative w-[80vw] min-w-[80vw] lg:w-[35vw] lg:min-w-[35vw] aspect-[4/3] lg:h-full overflow-hidden cursor-pointer bg-neutral-900 snap-center rounded-2xl border border-white/[0.03] hover:border-purple-500/20 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.37)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-400 focus-visible:outline-offset-2"
             >
               <img 
                 src={project.img} 

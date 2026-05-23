@@ -15,7 +15,7 @@ export const HorizontalScroll: React.FC<HorizontalScrollProps> = ({ children, sc
   // H-4: Initialize isMobile with SSR-safe media query check to prevent flash
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window === 'undefined') return false;
-    return window.matchMedia('(max-width: 767px)').matches;
+    return window.matchMedia('(max-width: 1023px)').matches;
   });
 
   // Sync external scrollRef with internal ref
@@ -24,10 +24,10 @@ export const HorizontalScroll: React.FC<HorizontalScrollProps> = ({ children, sc
   useLayoutEffect(() => {
     if (!actualScrollRef.current || !containerRef.current) return;
 
-    // FIX 2: Use matchMedia so the horizontal pin only applies on md+ screens
+    // FIX 2: Use matchMedia so the horizontal pin only applies on lg+ screens
     const mm = gsap.matchMedia();
 
-    mm.add("(min-width: 768px)", () => {
+    mm.add("(min-width: 1024px)", () => {
       setIsMobile(false);
       // Desktop / Tablet landscape: horizontal scroll as-is
       const animation = gsap.to(actualScrollRef.current!, {
@@ -60,8 +60,8 @@ export const HorizontalScroll: React.FC<HorizontalScrollProps> = ({ children, sc
       };
     });
 
-    mm.add("(max-width: 767px)", () => {
-      // Mobile: stack sections vertically, no GSAP pin
+    mm.add("(max-width: 1023px)", () => {
+      // Mobile & Portrait Tablet: stack sections vertically, no GSAP pin
       setIsMobile(true);
       return () => {
         // Cleanup: restore defaults when leaving this breakpoint

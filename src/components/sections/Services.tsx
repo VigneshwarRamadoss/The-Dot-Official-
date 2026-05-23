@@ -79,7 +79,7 @@ export default function Services() {
   return (
     <section 
       ref={sectionRef}
-      className="relative w-full md:w-max md:min-w-[100vw] min-h-[100dvh] h-auto md:h-screen py-20 md:py-0 flex items-center px-5 md:px-32 flex-shrink-0 border-l border-white/5 overflow-hidden" 
+      className="relative w-full lg:w-max lg:min-w-[100vw] min-h-[100dvh] h-auto lg:h-screen py-20 lg:py-0 flex items-center px-6 lg:px-32 flex-shrink-0 border-l border-white/5 overflow-hidden" 
       id="services"
     >
       {/* Services Background Image & Premium Overlay */}
@@ -106,8 +106,8 @@ export default function Services() {
         />
       </div>
 
-      <div className="relative z-10 flex flex-col md:flex-row gap-8 md:gap-20 items-start md:items-center w-full">
-        <div className="w-full md:w-[35vw] flex-shrink-0">
+      <div className="relative z-10 flex flex-col lg:flex-row gap-8 lg:gap-20 items-start lg:items-center w-full">
+        <div className="w-full lg:w-[35vw] flex-shrink-0">
           {/* Eyebrow label */}
           <span className="text-[10px] sm:text-xs md:text-sm font-sans tracking-[0.2em] text-neutral-500 uppercase mb-4 block">
             OUR CAPABILITIES
@@ -128,7 +128,7 @@ export default function Services() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-row gap-4 md:gap-8 md:pr-10 w-full md:w-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row gap-4 lg:gap-8 lg:pr-10 w-full lg:w-auto">
           {services.map((service, idx) => (
             <motion.div 
               key={idx}
@@ -137,7 +137,7 @@ export default function Services() {
               initial={{ opacity: 0, y: 20 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ delay: idx * 0.07, duration: 0.5 }}
-              className="w-full md:w-[350px] h-auto md:h-[450px] bg-white/[0.02] border border-white/[0.06] p-6 md:p-10 flex flex-col justify-between group relative overflow-hidden backdrop-blur-md rounded-[2rem] transition-all duration-500 shadow-[0_12px_40px_rgba(0,0,0,0.4)] hover:shadow-[0_20px_50px_rgba(168,85,247,0.08)] hover:border-purple-500/30"
+              className="w-full lg:w-[350px] h-auto lg:h-[450px] bg-white/[0.02] border border-white/[0.06] p-6 md:p-10 flex flex-col justify-between group relative overflow-hidden backdrop-blur-md rounded-[2rem] transition-all duration-500 shadow-[0_12px_40px_rgba(0,0,0,0.4)] hover:shadow-[0_20px_50px_rgba(168,85,247,0.08)] hover:border-purple-500/30"
             >
               {/* Radial gradient hover accent glow */}
               <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 via-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

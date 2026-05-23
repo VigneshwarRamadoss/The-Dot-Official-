@@ -21,7 +21,7 @@ export default function About() {
       const mm = gsap.matchMedia();
 
       // ─── DESKTOP: Horizontal scroll-linked animation ───────────────────
-      mm.add('(min-width: 768px)', () => {
+      mm.add('(min-width: 1024px)', () => {
         // Set ALL elements invisible immediately, before first paint
         gsap.set(allEls, { opacity: 0, y: 40 });
 
@@ -59,7 +59,7 @@ export default function About() {
       });
 
       // ─── MOBILE: Standard scroll-triggered reveal (no horizontal offsets) ─
-      mm.add('(max-width: 767px)', () => {
+      mm.add('(max-width: 1023px)', () => {
         // Ensure content is visible first
         gsap.set(allEls, { opacity: 0, y: 30 });
 
@@ -85,7 +85,7 @@ export default function About() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full md:w-screen min-h-[100dvh] h-auto md:h-screen py-20 md:py-0 flex items-center justify-center flex-shrink-0 bg-[#ede7de] px-6 md:px-32 border-l border-black/10 overflow-hidden"
+      className="relative w-full lg:w-screen min-h-[100dvh] h-auto lg:h-screen py-20 lg:py-0 flex items-center justify-center flex-shrink-0 bg-[#ede7de] px-6 lg:px-32 border-l border-black/10 overflow-hidden"
       id="about"
     >
       {/* Grid Pattern */}

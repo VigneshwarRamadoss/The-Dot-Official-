@@ -18,7 +18,7 @@ export default function Hero() {
     let splitInstance: SplitType | null = null;
 
     // Desktop only: character scatter animation on horizontal scroll
-    mm.add('(min-width: 768px)', () => {
+    mm.add('(min-width: 1024px)', () => {
       splitInstance = new SplitType(textRef.current!, { types: 'words,chars' });
       const chars = splitInstance.chars;
 
@@ -68,7 +68,7 @@ export default function Hero() {
     });
 
     // Mobile: no SplitType, no animation — text stays fully visible
-    mm.add('(max-width: 767px)', () => {
+    mm.add('(max-width: 1023px)', () => {
       // ensure text is fully visible, no split
       if (textRef.current) {
         textRef.current.style.opacity = '1';
@@ -79,7 +79,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative w-full md:w-screen h-[100dvh] md:h-screen overflow-hidden flex-shrink-0 bg-transparent px-5 md:px-16 lg:px-24" id="hero">
+    <section ref={containerRef} className="relative w-full lg:w-screen h-[100dvh] lg:h-screen overflow-hidden flex-shrink-0 bg-transparent px-5 lg:px-24" id="hero">
       {/* Hero Background Image & Premium Overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden">
         <div 

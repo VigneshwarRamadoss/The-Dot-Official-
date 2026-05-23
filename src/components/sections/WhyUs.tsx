@@ -77,7 +77,7 @@ export default function WhyUs() {
   return (
     <section 
       ref={sectionRef}
-      className="relative w-full md:w-max md:min-w-[100vw] min-h-[100dvh] h-auto md:h-screen py-20 md:py-0 flex flex-col md:flex-row items-center justify-center md:items-center px-6 md:px-32 flex-shrink-0 border-l border-white/5 overflow-hidden" 
+      className="relative w-full lg:w-max lg:min-w-[100vw] min-h-[100dvh] h-auto lg:h-screen py-20 lg:py-0 flex flex-col lg:flex-row items-center justify-center lg:items-center px-6 lg:px-32 flex-shrink-0 border-l border-white/5 overflow-hidden" 
       id="why"
     >
       {/* Background Image & Premium Overlay */}
@@ -104,9 +104,9 @@ export default function WhyUs() {
         />
       </div>
 
-      <div className="flex flex-col md:flex-row gap-12 md:gap-40 items-start md:items-center relative z-10 w-full">
+      <div className="flex flex-col lg:flex-row gap-12 lg:gap-40 items-start lg:items-center relative z-10 w-full">
         {/* Left: Title block */}
-        <div className="w-full md:w-[35vw] flex-shrink-0">
+        <div className="w-full lg:w-[35vw] flex-shrink-0">
           <span className="text-[10px] sm:text-xs md:text-sm font-sans tracking-[0.2em] text-neutral-500 uppercase mb-4 block">
             OUR PHILOSOPHY
           </span>
@@ -124,11 +124,11 @@ export default function WhyUs() {
         </div>
 
         {/* Right: Cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-row gap-6 md:gap-12 md:pr-10 w-full md:w-auto mt-8 md:mt-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row gap-6 lg:gap-12 lg:pr-10 w-full lg:w-auto mt-8 lg:mt-0">
           {values.map((value, idx) => (
             <motion.div
               key={idx}
-              className="w-full md:w-[360px] md:h-[380px] flex flex-col relative group cursor-pointer"
+              className="w-full lg:w-[360px] lg:h-[380px] flex flex-col relative group cursor-pointer"
               whileInView={{ opacity: 1, y: 0 }}
               initial={{ opacity: 0, y: 30 }}
               viewport={{ once: true, amount: 0.2 }}

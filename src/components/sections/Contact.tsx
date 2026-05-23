@@ -16,7 +16,7 @@ export default function Contact() {
   };
 
   return (
-    <section className="relative w-full md:w-screen min-h-[100dvh] flex flex-col justify-center flex-shrink-0 bg-transparent overflow-hidden" id="contact">
+    <section className="relative w-full lg:w-screen min-h-[100dvh] flex flex-col justify-center flex-shrink-0 bg-transparent overflow-hidden" id="contact">
        {/* Ambient contact background image */}
        <div 
          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none opacity-20 select-none" 

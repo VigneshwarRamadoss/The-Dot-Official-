@@ -159,13 +159,13 @@ export default function Navbar() {
   return (
     <>
       <nav 
-        className="fixed top-0 left-0 right-0 h-20 bg-neutral-950/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 md:px-12 pointer-events-auto"
+        className="fixed top-0 left-0 right-0 h-20 bg-neutral-950/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 lg:px-12 pointer-events-auto"
         style={{ zIndex: 'var(--z-nav)' }}
       >
         {/* Logo — C-3: Use font-display token instead of arbitrary font-['Montserrat'] */}
         <button 
           onClick={() => scrollToSection(0)}
-          className="font-display font-bold text-xl md:text-2xl tracking-tighter uppercase"
+          className="font-display font-bold text-xl lg:text-2xl tracking-tighter uppercase"
         >
           <span className="bg-gradient-to-r from-pink-300 via-slate-500 to-purple-500 bg-clip-text text-transparent">
             THE DOT
@@ -173,7 +173,7 @@ export default function Navbar() {
         </button>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8">
           {navItems.map((item, idx) => (
             <button
               key={item.id}
@@ -196,7 +196,7 @@ export default function Navbar() {
         </div>
 
         {/* Right CTA */}
-        <div className="hidden md:flex items-center">
+        <div className="hidden lg:flex items-center">
           <button 
             onClick={() => scrollToSection(navItems.findIndex(i => i.id === 'contact'))}
             className="px-6 py-2.5 bg-white text-black font-sans font-bold text-xs tracking-widest uppercase rounded-full hover:bg-gray-200 transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]"
@@ -206,7 +206,7 @@ export default function Navbar() {
         </div>
 
         {/* Hamburger Button (Mobile Only) */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
